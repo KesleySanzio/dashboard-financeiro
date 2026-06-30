@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Financeiro</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3250;
+    --text: #e2e8f0;
+    --muted: #8892a4;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --blue: #3b82f6;
+    --purple: #a855f7;
+    --cyan: #06b6d4;
+    --accent: #6366f1;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* HEADER */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--accent), var(--purple)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .logo h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
+  .logo span { color: var(--muted); font-size: 12px; font-weight: 400; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .update-badge { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 5px 12px; font-size: 11px; color: var(--muted); }
+  .update-badge b { color: var(--green); }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--surface);
+    padding: 8px 28px 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .nav-tab {
+    padding: 8px 18px;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    border: 1px solid transparent;
+    border-bottom: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .nav-tab:hover { color: var(--text); background: var(--surface2); }
+  .nav-tab.active { color: var(--text); background: var(--bg); border-color: var(--border); }
+
+  /* MAIN */
+  main { padding: 24px 28px; max-width: 1400px; margin: 0 auto; }
+
+  /* SECTION */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* PERIOD FILTER */
+  .period-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .period-bar label { font-size: 12px; color: var(--muted); }
+  .period-btn {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.15s;
+  }
+  .period-btn:hover, .period-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  select.period-sel {
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 12px;
+    cursor: pointer;
+    outline: none;
+  }
+
+  /* KPI CARDS */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--card-color, var(--accent));
+  }
+  .kpi-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .kpi-value { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+  .kpi-value.pos { color: var(--green); }
+  .kpi-value.neg { color: var(--red); }
+  .kpi-value.neutral { color: var(--text); }
+  .kpi-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .kpi-icon { position: absolute; right: 16px; top: 16px; font-size: 20px; opacity: 0.3; }
+
+  /* CHARTS */
+  .chart-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .chart-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .chart-title { font-size: 13px; font-weight: 600; margin-bottom: 16px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  .chart-title .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+  .chart-wrap { position: relative; }
+
+  /* ALERT BANNER */
+  .alert-banner {
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    border: 1px solid;
+  }
+  .alert-danger { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: #fca5a5; }
+  .alert-warning { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); color: #fcd34d; }
+  .alert-success { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.3); color: #86efac; }
+
+  /* TABLE */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th { background: var(--surface2); color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: var(--surface2); }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .badge-red { background: rgba(239,68,68,0.15); color: var(--red); }
+  .badge-green { background: rgba(34,197,94,0.15); color: var(--green); }
+  .badge-yellow { background: rgba(245,158,11,0.15); color: var(--yellow); }
+
+  /* DIVIDAS */
+  .divida-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .divida-info { flex: 1; }
+  .divida-nome { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+  .divida-original { font-size: 11px; color: var(--muted); }
+  .divida-valores { text-align: right; }
+  .divida-atual { font-size: 18px; font-weight: 700; color: var(--red); }
+  .divida-ratio { font-size: 11px; color: var(--muted); }
+  .progress-bar { height: 4px; background: var(--surface2); border-radius: 4px; margin-top: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--red), var(--yellow)); }
+  .dividas-total-box {
+    background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(239,68,68,0.05));
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* CALENDAR */
+  .venc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .venc-group { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .venc-header { background: var(--surface2); padding: 8px 12px; font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
+  .venc-item { padding: 7px 12px; border-bottom: 1px solid var(--border); font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
+  .venc-item:last-child { border-bottom: none; }
+  .venc-nome { color: var(--text); }
+  .venc-valor { color: var(--muted); font-weight: 500; }
+
+  /* INSIGHT CARDS */
+  .insight-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  .insight-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .insight-card h4 { font-size: 13px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .insight-card p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+  .insight-card .value { font-size: 24px; font-weight: 700; margin: 8px 0 4px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    main { padding: 16px; }
+    .chart-grid { grid-template-columns: 1fr; }
+    .chart-grid-3 { grid-template-columns: 1fr; }
+    header { padding: 12px 16px; }
+    .logo h1 { font-size: 15px; }
+  }
+
+  /* LOADING */
+  .loading { text-align: center; padding: 60px; color: var(--muted); font-size: 14px; }
+  .spinner { display: inline-block; width: 24px; height: 24px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* SECTION TITLE */
+  .section-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .section-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">💰</div>
+    <div>
+      <h1>Dashboard Financeiro</h1>
+      <span>Sanzio Contabilidade</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="update-badge">Atualizado: <b id="data-atualizacao">—</b></div>
+  </div>
+</header>
+
+<nav class="nav-tabs">
+  <div class="nav-tab active" onclick="showSection('visao-geral')">📊 Visão Geral</div>
+  <div class="nav-tab" onclick="showSection('fluxo')">📈 Fluxo de Caixa</div>
+  <div class="nav-tab" onclick="showSection('despesas')">💸 Despesas Fixas</div>
+  <div class="nav-tab" onclick="showSection('dividas')">🔴 Dívidas</div>
+  <div class="nav-tab" onclick="showSection('insights')">💡 Insights</div>
+</nav>
+
+<main>
+  <div id="loading" class="loading">
+    <div class="spinner"></div><br>Carregando dados financeiros...
+  </div>
+
+  <!-- ====== VISÃO GERAL ====== -->
+  <div class="section" id="visao-geral">
+    <div class="period-bar">
+      <label>Período:</label>
+      <button class="period-btn" onclick="setPeriod(6)">6 meses</button>
+      <button class="period-btn active" onclick="setPeriod(12)">12 meses</button>
+      <button class="period-btn" onclick="setPeriod(24)">24 meses</button>
+      <button class="period-btn" onclick="setPeriod(0)">Todos</button>
+    </div>
+
+    <div id="alertas-container"></div>
+
+    <div class="kpi-grid" id="kpi-grid"></div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title"><span class="dot"></span>Receita vs Despesas</div>
+        <div class="chart-wrap" style="height:260px"><canvas id="chart-receita-despesa"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title"><span class="dot" style="background:var(--yellow)"></span>Saldo Mensal</div>
+        <div class="chart-wrap" style="height:260px"><canvas id="chart-saldo"></canvas></div>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title"><span class="dot" style="background:var(--green)"></span>Evolução do Investimento (Reserva)</div>
+        <div class="chart-wrap" style="height:220px"><canvas id="chart-investimento"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title"><span class="dot" style="background:var(--purple)"></span>Taxa de Comprometimento</div>
+        <div class="chart-wrap" style="height:220px"><canvas id="chart-comprometimento"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== FLUXO ====== -->
+  <div class="section" id="fluxo">
+    <p class="section-title">Fluxo de Caixa Detalhado</p>
+    <p class="section-sub">Movimentação mensal completa — Ago/2024 a Jan/2027</p>
+
+    <div class="chart-card" style="margin-bottom:20px">
+      <div class="chart-title"><span class="dot"></span>Saldo Acumulado ao longo do tempo</div>
+      <div class="chart-wrap" style="height:300px"><canvas id="chart-saldo-linha"></canvas></div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title"><span class="dot" style="background:var(--cyan)"></span>Tabela Completa de Movimentação</div>
+      <table class="data-table" id="tabela-fluxo">
+        <thead><tr>
+          <th>Mês</th>
+          <th>Receita Total</th>
+          <th>Salário Líquido</th>
+          <th>Despesas</th>
+          <th>Saldo</th>
+          <th>Investimento</th>
+          <th>Status</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ====== DESPESAS ====== -->
+  <div class="section" id="despesas">
+    <p class="section-title">Despesas Fixas Mensais</p>
+    <p class="section-sub">Calendário de vencimentos e composição das despesas</p>
+
+    <div class="kpi-grid" id="kpi-despesas"></div>
+
+    <div class="chart-grid" style="margin-bottom:20px">
+      <div class="chart-card">
+        <div class="chart-title"><span class="dot" style="background:var(--red)"></span>Composição das Despesas (Top 10)</div>
+        <div class="chart-wrap" style="height:280px"><canvas id="chart-donut-desp"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title"><span class="dot" style="background:var(--yellow)"></span>Por Dia de Vencimento</div>
+        <div class="chart-wrap" style="height:280px"><canvas id="chart-venc-bar"></canvas></div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title"><span class="dot" style="background:var(--purple)"></span>Calendário de Vencimentos</div>
+      <div class="venc-grid" id="venc-calendario"></div>
+    </div>
+  </div>
+
+  <!-- ====== DÍVIDAS ====== -->
+  <div class="section" id="dividas">
+    <p class="section-title">Painel de Dívidas</p>
+    <p class="section-sub">Situação atual de todas as dívidas cadastradas</p>
+
+    <div class="dividas-total-box">
+      <div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:4px">TOTAL DE DÍVIDAS (Valor Atual)</div>
+        <div style="font-size:32px;font-weight:800;color:var(--red)" id="total-dividas">—</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Valor original: <span id="total-original" style="color:var(--yellow)">—</span></div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:4px">CRESCIMENTO DA DÍVIDA</div>
+        <div style="font-size:28px;font-weight:700;color:var(--red)" id="crescimento-divida">—</div>
+        <div style="font-size:12px;color:var(--muted)">em relação ao valor original</div>
+      </div>
+    </div>
+
+    <div class="chart-grid" style="margin-bottom:20px">
+      <div class="chart-card">
+        <div class="chart-title"><span class="dot" style="background:var(--red)"></span>Distribuição das Dívidas (Valor Atual)</div>
+        <div class="chart-wrap" style="height:260px"><canvas id="chart-dividas-pie"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title"><span class="dot" style="background:var(--yellow)"></span>Original vs Atual por Credor</div>
+        <div class="chart-wrap" style="height:260px"><canvas id="chart-dividas-bar"></canvas></div>
+      </div>
+    </div>
+
+    <div id="lista-dividas"></div>
+  </div>
+
+  <!-- ====== INSIGHTS ====== -->
+  <div class="section" id="insights">
+    <p class="section-title">Insights & Recomendações</p>
+    <p class="section-sub">Análise automática da sua situação financeira</p>
+    <div class="insight-grid" id="insight-grid"></div>
+    <hr class="divider">
+    <div class="chart-card">
+      <div class="chart-title"><span class="dot" style="background:var(--green)"></span>Projeção de Saldo — Próximos 6 Meses</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chart-projecao"></canvas></div>
+    </div>
+  </div>
+</main>
+
+<script>
+// ===================== CONFIG =====================
+// Para GitHub Pages: apontar para o raw do repositório
+// const DATA_URL = 'https://raw.githubusercontent.com/SEU_USUARIO/SEU_REPO/main/dados.json';
+// Para testes locais, usa dados embutidos:
+const DATA_URL = null;
+
+const DADOS_EMBED = {"ultima_atualizacao":"2026-06-30","salario_bruto":6842.66,"salario_liquido_atual":5027.34,"movimentacao":[{"mes":"Ago 2024","despesas":4069.75,"receita":2735.23,"salario_liquido":1765.23,"saldo":-1334.52,"investimento":0},{"mes":"Set 2024","despesas":4053.47,"receita":2487.15,"salario_liquido":1540.45,"saldo":-1566.32,"investimento":0},{"mes":"Out 2024","despesas":5745.68,"receita":2542.45,"salario_liquido":1540.45,"saldo":-3203.23,"investimento":0},{"mes":"Nov 2024","despesas":5013.64,"receita":1530.0,"salario_liquido":498.0,"saldo":-3483.64,"investimento":0},{"mes":"Dez 2024","despesas":5686.89,"receita":2422.45,"salario_liquido":1540.45,"saldo":-3264.44,"investimento":0},{"mes":"Jan 2025","despesas":3961.78,"receita":2316.0,"salario_liquido":1434.0,"saldo":-1645.78,"investimento":0},{"mes":"Fev 2025","despesas":2460.19,"receita":837.0,"salario_liquido":330.0,"saldo":-1623.19,"investimento":0},{"mes":"Mar 2025","despesas":3117.39,"receita":2286.0,"salario_liquido":1734.0,"saldo":-831.39,"investimento":0},{"mes":"Abr 2025","despesas":3613.72,"receita":2286.0,"salario_liquido":1734.0,"saldo":-1327.72,"investimento":0},{"mes":"Mai 2025","despesas":3893.24,"receita":1986.0,"salario_liquido":1434.0,"saldo":-1907.24,"investimento":0},{"mes":"Jun 2025","despesas":3695.36,"receita":2837.57,"salario_liquido":2285.57,"saldo":-857.79,"investimento":0},{"mes":"Jul 2025","despesas":3262.18,"receita":2837.57,"salario_liquido":2285.57,"saldo":-424.61,"investimento":0},{"mes":"Ago 2025","despesas":3042.29,"receita":2837.57,"salario_liquido":2285.57,"saldo":-204.72,"investimento":0},{"mes":"Set 2025","despesas":2246.21,"receita":2763.35,"salario_liquido":2583.35,"saldo":517.14,"investimento":0},{"mes":"Out 2025","despesas":2229.68,"receita":3363.92,"salario_liquido":3031.92,"saldo":1134.24,"investimento":0},{"mes":"Nov 2025","despesas":3207.52,"receita":3377.27,"salario_liquido":3347.27,"saldo":169.75,"investimento":0},{"mes":"Dez 2025","despesas":3536.7,"receita":3377.27,"salario_liquido":3347.27,"saldo":-159.43,"investimento":1000},{"mes":"Jan 2026","despesas":4161.33,"receita":4792.69,"salario_liquido":3652.69,"saldo":631.36,"investimento":1500},{"mes":"Fev 2026","despesas":6109.16,"receita":5641.7,"salario_liquido":4479.7,"saldo":-467.46,"investimento":2500},{"mes":"Mar 2026","despesas":17120.96,"receita":18122.83,"salario_liquido":4234.83,"saldo":1001.87,"investimento":2500},{"mes":"Abr 2026","despesas":5950.54,"receita":5520.05,"salario_liquido":4234.83,"saldo":-430.49,"investimento":0},{"mes":"Mai 2026","despesas":5461.07,"receita":6502.56,"salario_liquido":5027.34,"saldo":1041.49,"investimento":0},{"mes":"Jun 2026","despesas":7008.85,"receita":6502.56,"salario_liquido":5027.34,"saldo":-506.29,"investimento":1000},{"mes":"Jul 2026","despesas":6780.67,"receita":6502.56,"salario_liquido":5027.34,"saldo":-278.11,"investimento":1000},{"mes":"Ago 2026","despesas":6789.42,"receita":6502.56,"salario_liquido":5027.34,"saldo":-286.86,"investimento":1000},{"mes":"Set 2026","despesas":6800.42,"receita":6502.56,"salario_liquido":5027.34,"saldo":-297.86,"investimento":1000},{"mes":"Out 2026","despesas":6243.55,"receita":6462.56,"salario_liquido":5027.34,"saldo":219.01,"investimento":1000},{"mes":"Nov 2026","despesas":6002.84,"receita":6502.56,"salario_liquido":5027.34,"saldo":499.72,"investimento":1000},{"mes":"Dez 2026","despesas":6013.84,"receita":6502.56,"salario_liquido":5027.34,"saldo":488.72,"investimento":1000},{"mes":"Jan 2027","despesas":4719.84,"receita":6462.56,"salario_liquido":5027.34,"saldo":1742.72,"investimento":1000}],"despesas_fixas":[{"nome":"Mercado Pago","vencimento":1,"valor":1400.0},{"nome":"Coop Viagem Foz","vencimento":1,"valor":545.87},{"nome":"Diego Foz","vencimento":1,"valor":506.0},{"nome":"Academia","vencimento":1,"valor":100.0},{"nome":"Gasolina","vencimento":1,"valor":400.0},{"nome":"PC (Diego)","vencimento":1,"valor":450.0},{"nome":"Carlos TV","vencimento":1,"valor":158.0},{"nome":"Consórcio (PUV)","vencimento":1,"valor":220.0},{"nome":"João (contabilidade)","vencimento":5,"valor":400.0},{"nome":"Spotify","vencimento":5,"valor":40.0},{"nome":"Disciplina Isolada","vencimento":5,"valor":117.69},{"nome":"Net","vencimento":10,"valor":101.97},{"nome":"Cemig","vencimento":10,"valor":250.0},{"nome":"Copasa","vencimento":10,"valor":100.0},{"nome":"Seguro","vencimento":10,"valor":165.0},{"nome":"Consórcio (Milin)","vencimento":10,"valor":1035.0},{"nome":"Consórcio (Amanda)","vencimento":10,"valor":262.0},{"nome":"Mercado Pago Emp Rap","vencimento":15,"valor":213.3},{"nome":"Sócio Cruzeiro","vencimento":15,"valor":100.0},{"nome":"Viagem Foz","vencimento":15,"valor":117.87},{"nome":"Davi (contabilidade)","vencimento":20,"valor":200.0},{"nome":"Mercado Pago Emp","vencimento":18,"valor":251.71},{"nome":"Pai iPhone 14 Plus","vencimento":28,"valor":485.22},{"nome":"Renata (contabilidade)","vencimento":28,"valor":350.0},{"nome":"Parcelamento IPVA","vencimento":28,"valor":619.0}],"receitas_variaveis":[{"nome":"Salário Líquido","valor":5027.34,"tipo":"salario"},{"nome":"João (contabilidade)","valor":400.0,"tipo":"contabilidade"},{"nome":"Davi (contabilidade)","valor":200.0,"tipo":"contabilidade"},{"nome":"Renata (contabilidade)","valor":350.0,"tipo":"contabilidade"},{"nome":"Pai iPhone 14 Plus","valor":485.22,"tipo":"parcelamento"},{"nome":"Spotify (compartilhado)","valor":40.0,"tipo":"servico"}],"dividas":[{"credor":"OMNI S/A","valor_original":9232.4,"valor_atual":11369.52},{"credor":"Nu Financeira (1)","valor_original":986.29,"valor_atual":38176.76},{"credor":"Lojas Riachuelo","valor_original":2890.66,"valor_atual":5409.26},{"credor":"Banco PAN","valor_original":5339.24,"valor_atual":8110.81},{"credor":"Nu Financeira (2)","valor_original":8455.12,"valor_atual":25250.92},{"credor":"Banco Pan (2)","valor_original":423.2,"valor_atual":467.3},{"credor":"PicPay","valor_original":36353.25,"valor_atual":167704.96},{"credor":"Cartão ITI (Itaú)","valor_original":805.19,"valor_atual":977.73},{"credor":"Banco Inter","valor_original":8736.42,"valor_atual":30469.8},{"credor":"Banco CBSS","valor_original":0,"valor_atual":6590.36},{"credor":"Will Financeira","valor_original":0,"valor_atual":383272.41}]};
+
+// ===================== STATE =====================
+let dados = null;
+let periodoAtivo = 12;
+const charts = {};
+
+function brl(v) {
+  return 'R$ ' + Math.abs(v).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+function brlSigned(v) {
+  const s = v < 0 ? '- R$ ' : 'R$ ';
+  return s + Math.abs(v).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+function getMov() {
+  const all = dados.movimentacao.filter(m => m.receita > 0 || m.despesas > 0);
+  if (periodoAtivo === 0) return all;
+  return all.slice(-periodoAtivo);
+}
+
+// ===================== INIT =====================
+async function init() {
+  try {
+    if (DATA_URL) {
+      const r = await fetch(DATA_URL + '?t=' + Date.now());
+      dados = await r.json();
+    } else {
+      dados = DADOS_EMBED;
+    }
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('data-atualizacao').textContent = dados.ultima_atualizacao;
+    renderAll();
+    document.getElementById('visao-geral').classList.add('active');
+  } catch(e) {
+    document.getElementById('loading').innerHTML = '<span style="color:var(--red)">❌ Erro ao carregar dados. Verifique a URL do JSON.</span>';
+  }
+}
+
+function renderAll() {
+  renderVisaoGeral();
+  renderFluxo();
+  renderDespesas();
+  renderDividas();
+  renderInsights();
+}
+
+// ===================== NAVEGAÇÃO =====================
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function setPeriod(n) {
+  periodoAtivo = n;
+  document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderVisaoGeral();
+}
+
+function destroyChart(id) {
+  if (charts[id]) { charts[id].destroy(); delete charts[id]; }
+}
+
+// ===================== VISÃO GERAL =====================
+function renderVisaoGeral() {
+  const mov = getMov();
+  const ultimo = mov[mov.length - 1];
+  const penultimo = mov[mov.length - 2];
+
+  // Alertas
+  const alertas = [];
+  if (ultimo.saldo < 0) alertas.push({tipo:'danger', msg:`⚠️ Saldo negativo em ${ultimo.mes}: ${brlSigned(ultimo.saldo)}`});
+  const mesesNeg = mov.filter(m => m.saldo < 0).length;
+  if (mesesNeg > 0) alertas.push({tipo:'warning', msg:`📉 ${mesesNeg} de ${mov.length} meses com saldo negativo no período`});
+  if (ultimo.investimento > 0) alertas.push({tipo:'success', msg:`✅ Investimento ativo: ${brl(ultimo.investimento)}/mês para reserva`});
+
+  const ac = document.getElementById('alertas-container');
+  ac.innerHTML = alertas.map(a => `<div class="alert-banner alert-${a.tipo}">${a.msg}</div>`).join('');
+
+  // KPIs
+  const totalRec = mov.reduce((s,m) => s+m.receita, 0);
+  const totalDesp = mov.reduce((s,m) => s+m.despesas, 0);
+  const saldoAcum = mov.reduce((s,m) => s+m.saldo, 0);
+  const totalInv = mov.reduce((s,m) => s+m.investimento, 0);
+  const comprometimento = ultimo.despesas / ultimo.receita * 100;
+
+  document.getElementById('kpi-grid').innerHTML = `
+    <div class="kpi-card" style="--card-color:var(--blue)">
+      <div class="kpi-icon">💼</div>
+      <div class="kpi-label">Salário Líquido Atual</div>
+      <div class="kpi-value neutral">${brl(dados.salario_liquido_atual)}</div>
+      <div class="kpi-sub">Bruto: ${brl(dados.salario_bruto)}</div>
+    </div>
+    <div class="kpi-card" style="--card-color:var(--green)">
+      <div class="kpi-icon">📥</div>
+      <div class="kpi-label">Total Recebido (período)</div>
+      <div class="kpi-value pos">${brl(totalRec)}</div>
+      <div class="kpi-sub">Média: ${brl(totalRec/mov.length)}/mês</div>
+    </div>
+    <div class="kpi-card" style="--card-color:var(--red)">
+      <div class="kpi-icon">📤</div>
+      <div class="kpi-label">Total Despesas (período)</div>
+      <div class="kpi-value neg">${brl(totalDesp)}</div>
+      <div class="kpi-sub">Média: ${brl(totalDesp/mov.length)}/mês</div>
+    </div>
+    <div class="kpi-card" style="--card-color:${saldoAcum >= 0 ? 'var(--green)' : 'var(--red)'}">
+      <div class="kpi-icon">⚖️</div>
+      <div class="kpi-label">Saldo Acumulado</div>
+      <div class="kpi-value ${saldoAcum >= 0 ? 'pos' : 'neg'}">${brl(saldoAcum)}</div>
+      <div class="kpi-sub">Último mês: ${brlSigned(ultimo.saldo)}</div>
+    </div>
+    <div class="kpi-card" style="--card-color:var(--purple)">
+      <div class="kpi-icon">🏦</div>
+      <div class="kpi-label">Investimento Total</div>
+      <div class="kpi-value pos">${brl(totalInv)}</div>
+      <div class="kpi-sub">Atual: ${brl(ultimo.investimento)}/mês</div>
+    </div>
+    <div class="kpi-card" style="--card-color:${comprometimento > 100 ? 'var(--red)' : comprometimento > 80 ? 'var(--yellow)' : 'var(--green)'}">
+      <div class="kpi-icon">📊</div>
+      <div class="kpi-label">Comprometimento (mês atual)</div>
+      <div class="kpi-value ${comprometimento > 100 ? 'neg' : comprometimento > 80 ? '' : 'pos'}">${comprometimento.toFixed(1)}%</div>
+      <div class="kpi-sub">${comprometimento > 100 ? 'Gastos acima da receita' : comprometimento > 80 ? 'Atenção: margem baixa' : 'Saudável'}</div>
+    </div>
+  `;
+
+  // Chart Receita x Despesa
+  destroyChart('chart-receita-despesa');
+  charts['chart-receita-despesa'] = new Chart(document.getElementById('chart-receita-despesa'), {
+    type: 'bar',
+    data: {
+      labels: mov.map(m => m.mes),
+      datasets: [
+        { label: 'Receita', data: mov.map(m => m.receita), backgroundColor: 'rgba(34,197,94,0.7)', borderRadius: 4 },
+        { label: 'Despesas', data: mov.map(m => m.despesas), backgroundColor: 'rgba(239,68,68,0.7)', borderRadius: 4 }
+      ]
+    },
+    options: chartOpts('R$', true)
+  });
+
+  // Chart Saldo
+  destroyChart('chart-saldo');
+  charts['chart-saldo'] = new Chart(document.getElementById('chart-saldo'), {
+    type: 'bar',
+    data: {
+      labels: mov.map(m => m.mes),
+      datasets: [{
+        label: 'Saldo',
+        data: mov.map(m => m.saldo),
+        backgroundColor: mov.map(m => m.saldo >= 0 ? 'rgba(34,197,94,0.75)' : 'rgba(239,68,68,0.75)'),
+        borderRadius: 4
+      }]
+    },
+    options: chartOpts('R$', false)
+  });
+
+  // Chart Investimento
+  destroyChart('chart-investimento');
+  const invCumul = [];
+  let acc = 0;
+  mov.forEach(m => { acc += m.investimento; invCumul.push(acc); });
+  charts['chart-investimento'] = new Chart(document.getElementById('chart-investimento'), {
+    type: 'line',
+    data: {
+      labels: mov.map(m => m.mes),
+      datasets: [{
+        label: 'Reserva Acumulada',
+        data: invCumul,
+        borderColor: '#22c55e',
+        backgroundColor: 'rgba(34,197,94,0.1)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 3
+      }]
+    },
+    options: chartOpts('R$', false)
+  });
+
+  // Chart Comprometimento
+  destroyChart('chart-comprometimento');
+  charts['chart-comprometimento'] = new Chart(document.getElementById('chart-comprometimento'), {
+    type: 'line',
+    data: {
+      labels: mov.map(m => m.mes),
+      datasets: [{
+        label: '% Comprometido',
+        data: mov.map(m => m.receita > 0 ? +(m.despesas / m.receita * 100).toFixed(1) : 0),
+        borderColor: '#f59e0b',
+        backgroundColor: 'rgba(245,158,11,0.1)',
+        fill: true,
+        tension: 0.4,
+        pointRadius: 3
+      }]
+    },
+    options: {
+      ...chartOpts('%', false),
+      plugins: { ...chartOpts('%', false).plugins, annotation: undefined }
+    }
+  });
+}
+
+// ===================== FLUXO =====================
+function renderFluxo() {
+  const mov = dados.movimentacao.filter(m => m.receita > 0 || m.despesas > 0);
+
+  // Saldo linha
+  destroyChart('chart-saldo-linha');
+  charts['chart-saldo-linha'] = new Chart(document.getElementById('chart-saldo-linha'), {
+    type: 'line',
+    data: {
+      labels: mov.map(m => m.mes),
+      datasets: [
+        { label: 'Saldo', data: mov.map(m => m.saldo), borderColor: '#6366f1', backgroundColor: 'rgba(99,102,241,0.08)', fill: true, tension: 0.4, pointRadius: 2 },
+        { label: 'Zero', data: mov.map(() => 0), borderColor: 'rgba(255,255,255,0.2)', borderDash: [5,5], pointRadius: 0 }
+      ]
+    },
+    options: chartOpts('R$', false)
+  });
+
+  // Tabela
+  const tbody = document.querySelector('#tabela-fluxo tbody');
+  tbody.innerHTML = [...mov].reverse().map(m => {
+    const status = m.saldo >= 0 ? `<span class="badge badge-green">✓ Positivo</span>` : `<span class="badge badge-red">✗ Negativo</span>`;
+    return `<tr>
+      <td><b>${m.mes}</b></td>
+      <td style="color:var(--green)">${brl(m.receita)}</td>
+      <td style="color:var(--blue)">${brl(m.salario_liquido)}</td>
+      <td style="color:var(--red)">${brl(m.despesas)}</td>
+      <td style="color:${m.saldo >= 0 ? 'var(--green)' : 'var(--red)'};font-weight:600">${brlSigned(m.saldo)}</td>
+      <td style="color:var(--purple)">${m.investimento > 0 ? brl(m.investimento) : '—'}</td>
+      <td>${status}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ===================== DESPESAS =====================
+function renderDespesas() {
+  const df = dados.despesas_fixas;
+  const total = df.reduce((s,d) => s+d.valor, 0);
+  const rec = dados.salario_liquido_atual + 400 + 200 + 350 + 485.22;
+
+  document.getElementById('kpi-despesas').innerHTML = `
+    <div class="kpi-card" style="--card-color:var(--red)">
+      <div class="kpi-label">Total Despesas Fixas/mês</div>
+      <div class="kpi-value neg">${brl(total)}</div>
+      <div class="kpi-sub">${df.length} itens cadastrados</div>
+    </div>
+    <div class="kpi-card" style="--card-color:var(--yellow)">
+      <div class="kpi-label">Comprometimento s/ Salário</div>
+      <div class="kpi-value" style="color:var(--yellow)">${(total/dados.salario_liquido_atual*100).toFixed(1)}%</div>
+      <div class="kpi-sub">Só do salário líquido</div>
+    </div>
+    <div class="kpi-card" style="--card-color:var(--purple)">
+      <div class="kpi-label">Maior Despesa</div>
+      <div class="kpi-value neg">${brl(Math.max(...df.map(d=>d.valor)))}</div>
+      <div class="kpi-sub">${df.find(d=>d.valor===Math.max(...df.map(d=>d.valor)))?.nome}</div>
+    </div>
+    <div class="kpi-card" style="--card-color:var(--green)">
+      <div class="kpi-label">Consórcios (total/mês)</div>
+      <div class="kpi-value neg">${brl(df.filter(d=>d.nome.includes('Consórcio')).reduce((s,d)=>s+d.valor,0))}</div>
+      <div class="kpi-sub">3 consórcios ativos</div>
+    </div>
+  `;
+
+  // Donut top 10
+  const top10 = [...df].sort((a,b) => b.valor-a.valor).slice(0,10);
+  destroyChart('chart-donut-desp');
+  charts['chart-donut-desp'] = new Chart(document.getElementById('chart-donut-desp'), {
+    type: 'doughnut',
+    data: {
+      labels: top10.map(d => d.nome),
+      datasets: [{ data: top10.map(d => d.valor), backgroundColor: PALETTE, borderWidth: 1, borderColor: '#1a1d27' }]
+    },
+    options: { plugins: { legend: { position: 'right', labels: { color: '#8892a4', font: { size: 11 }, boxWidth: 12 } } }, responsive: true, maintainAspectRatio: false }
+  });
+
+  // Bar por vencimento
+  const porVenc = {};
+  df.forEach(d => {
+    const k = `Dia ${d.vencimento}`;
+    porVenc[k] = (porVenc[k] || 0) + d.valor;
+  });
+  const vKeys = Object.keys(porVenc).sort((a,b) => parseInt(a.split(' ')[1]) - parseInt(b.split(' ')[1]));
+  destroyChart('chart-venc-bar');
+  charts['chart-venc-bar'] = new Chart(document.getElementById('chart-venc-bar'), {
+    type: 'bar',
+    data: {
+      labels: vKeys,
+      datasets: [{ label: 'Total', data: vKeys.map(k => porVenc[k]), backgroundColor: 'rgba(245,158,11,0.7)', borderRadius: 6 }]
+    },
+    options: chartOpts('R$', false)
+  });
+
+  // Calendário
+  const grupos = {};
+  df.forEach(d => {
+    const k = d.vencimento;
+    if (!grupos[k]) grupos[k] = [];
+    grupos[k].push(d);
+  });
+  const cal = document.getElementById('venc-calendario');
+  cal.innerHTML = Object.keys(grupos).sort((a,b) => +a - +b).map(dia => `
+    <div class="venc-group">
+      <div class="venc-header">📅 Dia ${dia}</div>
+      ${grupos[dia].map(d => `<div class="venc-item"><span class="venc-nome">${d.nome}</span><span class="venc-valor">${brl(d.valor)}</span></div>`).join('')}
+    </div>
+  `).join('');
+}
+
+// ===================== DÍVIDAS =====================
+function renderDividas() {
+  const div = dados.dividas;
+  const totalAtual = div.reduce((s,d) => s+d.valor_atual, 0);
+  const totalOrig = div.filter(d=>d.valor_original>0).reduce((s,d) => s+d.valor_original, 0);
+  const crescimento = totalAtual / totalOrig;
+
+  document.getElementById('total-dividas').textContent = brl(totalAtual);
+  document.getElementById('total-original').textContent = brl(totalOrig);
+  document.getElementById('crescimento-divida').textContent = `+${((crescimento-1)*100).toFixed(0)}%`;
+
+  // Pie
+  destroyChart('chart-dividas-pie');
+  charts['chart-dividas-pie'] = new Chart(document.getElementById('chart-dividas-pie'), {
+    type: 'doughnut',
+    data: {
+      labels: div.map(d => d.credor),
+      datasets: [{ data: div.map(d => d.valor_atual), backgroundColor: PALETTE, borderWidth: 1, borderColor: '#1a1d27' }]
+    },
+    options: { plugins: { legend: { position: 'bottom', labels: { color: '#8892a4', font: { size: 10 }, boxWidth: 10, padding: 8 } } }, responsive: true, maintainAspectRatio: false }
+  });
+
+  // Bar
+  const divSorted = [...div].filter(d=>d.valor_original>0).sort((a,b) => b.valor_atual - a.valor_atual);
+  destroyChart('chart-dividas-bar');
+  charts['chart-dividas-bar'] = new Chart(document.getElementById('chart-dividas-bar'), {
+    type: 'bar',
+    data: {
+      labels: divSorted.map(d => d.credor),
+      datasets: [
+        { label: 'Valor Original', data: divSorted.map(d => d.valor_original), backgroundColor: 'rgba(245,158,11,0.7)', borderRadius: 4 },
+        { label: 'Valor Atual', data: divSorted.map(d => d.valor_atual), backgroundColor: 'rgba(239,68,68,0.7)', borderRadius: 4 }
+      ]
+    },
+    options: { ...chartOpts('R$', true), indexAxis: 'y' }
+  });
+
+  // Lista
+  const lista = document.getElementById('lista-dividas');
+  const divOrd = [...div].sort((a,b) => b.valor_atual - a.valor_atual);
+  lista.innerHTML = divOrd.map(d => {
+    const ratio = d.valor_original > 0 ? d.valor_atual / d.valor_original : null;
+    const pct = ratio ? Math.min((d.valor_original / d.valor_atual) * 100, 100) : 0;
+    const crescStr = ratio ? `${((ratio-1)*100).toFixed(0)}% de crescimento` : 'Valor original não informado';
+    return `
+    <div class="divida-card">
+      <div class="divida-info">
+        <div class="divida-nome">${d.credor}</div>
+        <div class="divida-original">Original: ${d.valor_original > 0 ? brl(d.valor_original) : 'N/D'} · ${crescStr}</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${100-pct}%"></div></div>
+      </div>
+      <div class="divida-valores">
+        <div class="divida-atual">${brl(d.valor_atual)}</div>
+        <div class="divida-ratio">${pct > 0 ? `${pct.toFixed(0)}% original restante` : 'Dívida cresceu muito'}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ===================== INSIGHTS =====================
+function renderInsights() {
+  const mov = dados.movimentacao.filter(m => m.receita > 0);
+  const ultimo = mov[mov.length - 1];
+  const ultimos3 = mov.slice(-3);
+  const saldoMedio3 = ultimos3.reduce((s,m)=>s+m.saldo,0)/3;
+  const df = dados.despesas_fixas;
+  const totalDividas = dados.dividas.reduce((s,d)=>s+d.valor_atual,0);
+  const consorciosMes = df.filter(d=>d.nome.includes('Consórcio')).reduce((s,d)=>s+d.valor,0);
+  const receita = dados.salario_liquido_atual + 400 + 200 + 350 + 485.22;
+
+  const insights = [
+    {
+      icon: '⚠️',
+      cor: 'var(--red)',
+      titulo: 'Dívida PicPay — Urgente',
+      valor: brl(167704.96),
+      desc: `A dívida com o PicPay cresceu de R$ 36.353 para R$ 167.704 — um aumento de 361%. É a maior dívida isolada e precisa de ação imediata (negociação ou parcelamento).`
+    },
+    {
+      icon: '📈',
+      cor: 'var(--yellow)',
+      titulo: 'Comprometimento com Consórcios',
+      valor: brl(consorciosMes) + '/mês',
+      desc: `Você tem 3 consórcios simultâneos que consomem ${brl(consorciosMes)}/mês. Isso representa ${(consorciosMes/receita*100).toFixed(0)}% da sua receita total estimada.`
+    },
+    {
+      icon: '✅',
+      cor: 'var(--green)',
+      titulo: 'Tendência de Melhora',
+      valor: 'Salário cresceu',
+      desc: `Seu salário líquido saiu de R$ 1.765 (Ago/2024) para R$ 5.027 (2026) — crescimento de 185%. A trajetória é positiva, mas as dívidas e despesas cresceram junto.`
+    },
+    {
+      icon: '💡',
+      cor: 'var(--blue)',
+      titulo: 'Saldo Médio (últimos 3 meses)',
+      valor: brlSigned(saldoMedio3),
+      desc: `Nos últimos 3 meses o saldo médio foi de ${brlSigned(saldoMedio3)}. ${saldoMedio3 < 0 ? 'Cortar gastos variáveis pode virar o jogo.' : 'Mantenha o ritmo e priorize a quitação das dívidas.'}`
+    },
+    {
+      icon: '🏦',
+      cor: 'var(--purple)',
+      titulo: 'Total de Dívidas',
+      valor: brl(totalDividas),
+      desc: `O montante total de dívidas é de ${brl(totalDividas)}. Com receita de ${brl(receita)}/mês, levaria mais de ${(totalDividas/receita).toFixed(0)} meses para quitar tudo sem outras despesas.`
+    },
+    {
+      icon: '🎯',
+      cor: 'var(--cyan)',
+      titulo: 'Receita Extra (contabilidade)',
+      valor: brl(950) + '/mês',
+      desc: `João, Davi e Renata geram R$ 950/mês adicionais via serviços contábeis. Expandir essa carteira é a alavanca mais eficiente para acelerar a quitação das dívidas.`
+    }
+  ];
+
+  document.getElementById('insight-grid').innerHTML = insights.map(i => `
+    <div class="insight-card">
+      <h4><span style="color:${i.cor}">${i.icon}</span> ${i.titulo}</h4>
+      <div class="value" style="color:${i.cor}">${i.valor}</div>
+      <p>${i.desc}</p>
+    </div>
+  `).join('');
+
+  // Projeção 6 meses
+  const baseRec = receita;
+  const baseDesp = df.reduce((s,d)=>s+d.valor,0);
+  const baseSaldo = baseRec - baseDesp;
+  const mesesProj = ['Ago 2026','Set 2026','Out 2026','Nov 2026','Dez 2026','Jan 2027'];
+  const projecao = mesesProj.map((_, i) => +(baseSaldo + i * 50).toFixed(2));
+  const otimista = mesesProj.map((_, i) => +(baseSaldo + i * 150).toFixed(2));
+
+  destroyChart('chart-projecao');
+  charts['chart-projecao'] = new Chart(document.getElementById('chart-projecao'), {
+    type: 'line',
+    data: {
+      labels: mesesProj,
+      datasets: [
+        { label: 'Cenário Base', data: projecao, borderColor: '#6366f1', backgroundColor: 'rgba(99,102,241,0.08)', fill: true, tension: 0.4, pointRadius: 4, borderDash: [6,3] },
+        { label: 'Cenário Otimista (+clientes)', data: otimista, borderColor: '#22c55e', backgroundColor: 'rgba(34,197,94,0.08)', fill: true, tension: 0.4, pointRadius: 4 }
+      ]
+    },
+    options: chartOpts('R$', false)
+  });
+}
+
+// ===================== HELPERS =====================
+const PALETTE = ['#6366f1','#ef4444','#f59e0b','#22c55e','#3b82f6','#a855f7','#06b6d4','#f97316','#14b8a6','#e11d48','#84cc16'];
+
+function chartOpts(unit, legend) {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: legend, labels: { color: '#8892a4', font: { size: 11 }, boxWidth: 12 } },
+      tooltip: {
+        callbacks: {
+          label: ctx => ' ' + (unit === 'R$' ? brl(ctx.raw) : ctx.raw + '%')
+        },
+        backgroundColor: '#22263a',
+        titleColor: '#e2e8f0',
+        bodyColor: '#8892a4',
+        borderColor: '#2e3250',
+        borderWidth: 1
+      }
+    },
+    scales: {
+      x: { ticks: { color: '#8892a4', font: { size: 10 }, maxRotation: 45 }, grid: { color: 'rgba(46,50,80,0.5)' } },
+      y: { ticks: { color: '#8892a4', font: { size: 10 }, callback: v => unit === 'R$' ? 'R$ ' + v.toLocaleString('pt-BR') : v + '%' }, grid: { color: 'rgba(46,50,80,0.5)' } }
+    }
+  };
+}
+
+init();
+</script>
+</body>
+</html>
