@@ -1,5 +1,5 @@
 {
-  "ultima_atualizacao": "2026-07-01 17:06",
+  "ultima_atualizacao": "2026-07-01 17:09",
   "salario_bruto": 6842.66,
   "salario_liquido_atual": 5000,
   "movimentacao": [
@@ -205,10 +205,10 @@
     },
     {
       "mes": "Julho 2026",
-      "despesas": 6920.67,
+      "despesas": 7013.67,
       "receita": 6502.56,
       "salario_liquido": 5027.34,
-      "saldo": -418.1099999999997,
+      "saldo": -511.1099999999997,
       "investimento": 1000
     },
     {
