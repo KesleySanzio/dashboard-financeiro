@@ -1,85 +1,583 @@
 {
-  "ultima_atualizacao": "2026-06-30",
+  "ultima_atualizacao": "2026-07-01 17:06",
   "salario_bruto": 6842.66,
-  "salario_liquido_atual": 5027.34,
+  "salario_liquido_atual": 5000,
   "movimentacao": [
-    {"mes": "Ago 2024", "despesas": 4069.75, "receita": 2735.23, "salario_liquido": 1765.23, "saldo": -1334.52, "investimento": 0},
-    {"mes": "Set 2024", "despesas": 4053.47, "receita": 2487.15, "salario_liquido": 1540.45, "saldo": -1566.32, "investimento": 0},
-    {"mes": "Out 2024", "despesas": 5745.68, "receita": 2542.45, "salario_liquido": 1540.45, "saldo": -3203.23, "investimento": 0},
-    {"mes": "Nov 2024", "despesas": 5013.64, "receita": 1530.00, "salario_liquido": 498.00, "saldo": -3483.64, "investimento": 0},
-    {"mes": "Dez 2024", "despesas": 5686.89, "receita": 2422.45, "salario_liquido": 1540.45, "saldo": -3264.44, "investimento": 0},
-    {"mes": "Jan 2025", "despesas": 3961.78, "receita": 2316.00, "salario_liquido": 1434.00, "saldo": -1645.78, "investimento": 0},
-    {"mes": "Fev 2025", "despesas": 2460.19, "receita": 837.00, "salario_liquido": 330.00, "saldo": -1623.19, "investimento": 0},
-    {"mes": "Mar 2025", "despesas": 3117.39, "receita": 2286.00, "salario_liquido": 1734.00, "saldo": -831.39, "investimento": 0},
-    {"mes": "Abr 2025", "despesas": 3613.72, "receita": 2286.00, "salario_liquido": 1734.00, "saldo": -1327.72, "investimento": 0},
-    {"mes": "Mai 2025", "despesas": 3893.24, "receita": 1986.00, "salario_liquido": 1434.00, "saldo": -1907.24, "investimento": 0},
-    {"mes": "Jun 2025", "despesas": 3695.36, "receita": 2837.57, "salario_liquido": 2285.57, "saldo": -857.79, "investimento": 0},
-    {"mes": "Jul 2025", "despesas": 3262.18, "receita": 2837.57, "salario_liquido": 2285.57, "saldo": -424.61, "investimento": 0},
-    {"mes": "Ago 2025", "despesas": 3042.29, "receita": 2837.57, "salario_liquido": 2285.57, "saldo": -204.72, "investimento": 0},
-    {"mes": "Set 2025", "despesas": 2246.21, "receita": 2763.35, "salario_liquido": 2583.35, "saldo": 517.14, "investimento": 0},
-    {"mes": "Out 2025", "despesas": 2229.68, "receita": 3363.92, "salario_liquido": 3031.92, "saldo": 1134.24, "investimento": 0},
-    {"mes": "Nov 2025", "despesas": 3207.52, "receita": 3377.27, "salario_liquido": 3347.27, "saldo": 169.75, "investimento": 0},
-    {"mes": "Dez 2025", "despesas": 3536.70, "receita": 3377.27, "salario_liquido": 3347.27, "saldo": -159.43, "investimento": 1000},
-    {"mes": "Jan 2026", "despesas": 4161.33, "receita": 4792.69, "salario_liquido": 3652.69, "saldo": 631.36, "investimento": 1500},
-    {"mes": "Fev 2026", "despesas": 6109.16, "receita": 5641.70, "salario_liquido": 4479.70, "saldo": -467.46, "investimento": 2500},
-    {"mes": "Mar 2026", "despesas": 17120.96, "receita": 18122.83, "salario_liquido": 4234.83, "saldo": 1001.87, "investimento": 2500},
-    {"mes": "Abr 2026", "despesas": 5950.54, "receita": 5520.05, "salario_liquido": 4234.83, "saldo": -430.49, "investimento": 0},
-    {"mes": "Mai 2026", "despesas": 5461.07, "receita": 6502.56, "salario_liquido": 5027.34, "saldo": 1041.49, "investimento": 0},
-    {"mes": "Jun 2026", "despesas": 7008.85, "receita": 6502.56, "salario_liquido": 5027.34, "saldo": -506.29, "investimento": 1000},
-    {"mes": "Jul 2026", "despesas": 6780.67, "receita": 6502.56, "salario_liquido": 5027.34, "saldo": -278.11, "investimento": 1000},
-    {"mes": "Ago 2026", "despesas": 6789.42, "receita": 6502.56, "salario_liquido": 5027.34, "saldo": -286.86, "investimento": 1000},
-    {"mes": "Set 2026", "despesas": 6800.42, "receita": 6502.56, "salario_liquido": 5027.34, "saldo": -297.86, "investimento": 1000},
-    {"mes": "Out 2026", "despesas": 6243.55, "receita": 6462.56, "salario_liquido": 5027.34, "saldo": 219.01, "investimento": 1000},
-    {"mes": "Nov 2026", "despesas": 6002.84, "receita": 6502.56, "salario_liquido": 5027.34, "saldo": 499.72, "investimento": 1000},
-    {"mes": "Dez 2026", "despesas": 6013.84, "receita": 6502.56, "salario_liquido": 5027.34, "saldo": 488.72, "investimento": 1000},
-    {"mes": "Jan 2027", "despesas": 4719.84, "receita": 6462.56, "salario_liquido": 5027.34, "saldo": 1742.72, "investimento": 1000}
+    {
+      "mes": "Junho 2024",
+      "despesas": 0,
+      "receita": 0,
+      "salario_liquido": 0,
+      "saldo": 2200,
+      "investimento": 0
+    },
+    {
+      "mes": "Julho 2024",
+      "despesas": 0,
+      "receita": 0,
+      "salario_liquido": 0,
+      "saldo": 2279,
+      "investimento": 0
+    },
+    {
+      "mes": "Agosto 2024",
+      "despesas": 4069.75,
+      "receita": 2735.23,
+      "salario_liquido": 1765.23,
+      "saldo": -1334.52,
+      "investimento": 0
+    },
+    {
+      "mes": "Setembro 2024",
+      "despesas": 4053.4700000000003,
+      "receita": 2487.1500000000005,
+      "salario_liquido": 1540.4500000000003,
+      "saldo": -1566.3199999999997,
+      "investimento": 0
+    },
+    {
+      "mes": "Outubro 2024",
+      "despesas": 5745.68,
+      "receita": 2542.4500000000003,
+      "salario_liquido": 1540.4500000000003,
+      "saldo": -3203.23,
+      "investimento": 0
+    },
+    {
+      "mes": "Novembro 2024",
+      "despesas": 5013.64,
+      "receita": 1530,
+      "salario_liquido": 498,
+      "saldo": -3483.6400000000003,
+      "investimento": 0
+    },
+    {
+      "mes": "Dezembro 2024",
+      "despesas": 5686.889999999999,
+      "receita": 2422.4500000000003,
+      "salario_liquido": 1540.4500000000003,
+      "saldo": -3264.439999999999,
+      "investimento": 0
+    },
+    {
+      "mes": "Janeiro 2025",
+      "despesas": 3961.7799999999997,
+      "receita": 2316,
+      "salario_liquido": 1434,
+      "saldo": -1645.7799999999997,
+      "investimento": 0
+    },
+    {
+      "mes": "Fevereiro 2025",
+      "despesas": 2460.19,
+      "receita": 837,
+      "salario_liquido": 330,
+      "saldo": -1623.19,
+      "investimento": 0
+    },
+    {
+      "mes": "Março 2025",
+      "despesas": 3117.3900000000003,
+      "receita": 2286,
+      "salario_liquido": 1734,
+      "saldo": -831.3900000000003,
+      "investimento": 0
+    },
+    {
+      "mes": "Abril 2025",
+      "despesas": 3613.72,
+      "receita": 2286,
+      "salario_liquido": 1734,
+      "saldo": -1327.7199999999998,
+      "investimento": 0
+    },
+    {
+      "mes": "Maio 2025",
+      "despesas": 3893.24,
+      "receita": 1986,
+      "salario_liquido": 1434,
+      "saldo": -1907.2399999999998,
+      "investimento": 0
+    },
+    {
+      "mes": "Junho 2025",
+      "despesas": 3695.36,
+      "receita": 2837.5699999999997,
+      "salario_liquido": 2285.5699999999997,
+      "saldo": -857.7900000000004,
+      "investimento": 0
+    },
+    {
+      "mes": "Julho 2025",
+      "despesas": 3262.1800000000003,
+      "receita": 2837.5699999999997,
+      "salario_liquido": 2285.5699999999997,
+      "saldo": -424.6100000000006,
+      "investimento": 0
+    },
+    {
+      "mes": "Agosto 2025",
+      "despesas": 3042.29,
+      "receita": 2837.5699999999997,
+      "salario_liquido": 2285.5699999999997,
+      "saldo": -204.72000000000025,
+      "investimento": 0
+    },
+    {
+      "mes": "Setembro 2025",
+      "despesas": 2246.21,
+      "receita": 2763.35,
+      "salario_liquido": 2583.35,
+      "saldo": 517.1399999999999,
+      "investimento": 0
+    },
+    {
+      "mes": "Outubro 2025",
+      "despesas": 2229.68,
+      "receita": 3363.92,
+      "salario_liquido": 3031.92,
+      "saldo": 1134.2400000000002,
+      "investimento": 0
+    },
+    {
+      "mes": "Novembro 2025",
+      "despesas": 3207.5199999999995,
+      "receita": 3377.2699999999995,
+      "salario_liquido": 3347.2699999999995,
+      "saldo": 169.75,
+      "investimento": 0
+    },
+    {
+      "mes": "Dezembro 2025",
+      "despesas": 3536.7,
+      "receita": 3377.2699999999995,
+      "salario_liquido": 3347.2699999999995,
+      "saldo": -159.4300000000003,
+      "investimento": 1000
+    },
+    {
+      "mes": "Janeiro 2026",
+      "despesas": 4161.33,
+      "receita": 4792.69,
+      "salario_liquido": 3652.6899999999996,
+      "saldo": 631.3599999999997,
+      "investimento": 1500
+    },
+    {
+      "mes": "Fevereiro 2026",
+      "despesas": 6109.16,
+      "receita": 5641.7,
+      "salario_liquido": 4479.7,
+      "saldo": -467.46000000000004,
+      "investimento": 2500
+    },
+    {
+      "mes": "Março 2026",
+      "despesas": 17120.96,
+      "receita": 18122.83,
+      "salario_liquido": 4234.83,
+      "saldo": 1001.8700000000026,
+      "investimento": 2500
+    },
+    {
+      "mes": "Abril 2026",
+      "despesas": 5950.540000000001,
+      "receita": 5520.05,
+      "salario_liquido": 4234.83,
+      "saldo": -430.4900000000007,
+      "investimento": 0
+    },
+    {
+      "mes": "Maio 2026",
+      "despesas": 5461.07,
+      "receita": 6502.56,
+      "salario_liquido": 5027.34,
+      "saldo": 1041.4900000000007,
+      "investimento": 0
+    },
+    {
+      "mes": "Junho 2026",
+      "despesas": 7008.85,
+      "receita": 6502.56,
+      "salario_liquido": 5027.34,
+      "saldo": -506.28999999999996,
+      "investimento": 1000
+    },
+    {
+      "mes": "Julho 2026",
+      "despesas": 6920.67,
+      "receita": 6502.56,
+      "salario_liquido": 5027.34,
+      "saldo": -418.1099999999997,
+      "investimento": 1000
+    },
+    {
+      "mes": "Agosto 2026",
+      "despesas": 6929.42,
+      "receita": 6502.56,
+      "salario_liquido": 5027.34,
+      "saldo": -426.8599999999997,
+      "investimento": 1000
+    },
+    {
+      "mes": "Setembro 2026",
+      "despesas": 6940.42,
+      "receita": 6502.56,
+      "salario_liquido": 5027.34,
+      "saldo": -437.8599999999997,
+      "investimento": 1000
+    },
+    {
+      "mes": "Outubro 2026",
+      "despesas": 6383.55,
+      "receita": 6462.56,
+      "salario_liquido": 5027.34,
+      "saldo": 79.01000000000022,
+      "investimento": 1000
+    },
+    {
+      "mes": "Novembro 2026",
+      "despesas": 6142.84,
+      "receita": 6502.56,
+      "salario_liquido": 5027.34,
+      "saldo": 359.72000000000025,
+      "investimento": 1000
+    },
+    {
+      "mes": "Dezembro 2026",
+      "despesas": 6153.84,
+      "receita": 6502.56,
+      "salario_liquido": 5027.34,
+      "saldo": 348.72000000000025,
+      "investimento": 1000
+    },
+    {
+      "mes": "Janeiro 2027",
+      "despesas": 4859.84,
+      "receita": 6462.56,
+      "salario_liquido": 5027.34,
+      "saldo": 1602.7200000000003,
+      "investimento": 1000
+    },
+    {
+      "mes": "Fevereiro 2027",
+      "despesas": 2814.97,
+      "receita": 5977.34,
+      "salario_liquido": 5027.34,
+      "saldo": 3162.3700000000003,
+      "investimento": 1000
+    },
+    {
+      "mes": "Março 2027",
+      "despesas": 2814.97,
+      "receita": 5977.34,
+      "salario_liquido": 5027.34,
+      "saldo": 3162.3700000000003,
+      "investimento": 1000
+    },
+    {
+      "mes": "Abril 2027",
+      "despesas": 2814.97,
+      "receita": 5977.34,
+      "salario_liquido": 5027.34,
+      "saldo": 3162.3700000000003,
+      "investimento": 1000
+    },
+    {
+      "mes": "Maio 2027",
+      "despesas": 2814.97,
+      "receita": 5977.34,
+      "salario_liquido": 5027.34,
+      "saldo": 3162.3700000000003,
+      "investimento": 1000
+    },
+    {
+      "mes": "Junho 2027",
+      "despesas": 2814.97,
+      "receita": 5977.34,
+      "salario_liquido": 5027.34,
+      "saldo": 3162.3700000000003,
+      "investimento": 1000
+    },
+    {
+      "mes": "Julho 2027",
+      "despesas": 2814.97,
+      "receita": 5977.34,
+      "salario_liquido": 5027.34,
+      "saldo": 3162.3700000000003,
+      "investimento": 1000
+    },
+    {
+      "mes": "Agosto 2027",
+      "despesas": 2814.97,
+      "receita": 5977.34,
+      "salario_liquido": 5027.34,
+      "saldo": 3162.3700000000003,
+      "investimento": 1000
+    }
   ],
   "despesas_fixas": [
-    {"nome": "Mercado Pago", "vencimento": 1, "valor": 1400.00},
-    {"nome": "Coop Viagem Foz", "vencimento": 1, "valor": 545.87},
-    {"nome": "Diego Foz", "vencimento": 1, "valor": 506.00},
-    {"nome": "Academia", "vencimento": 1, "valor": 100.00},
-    {"nome": "Gasolina", "vencimento": 1, "valor": 400.00},
-    {"nome": "PC (Diego)", "vencimento": 1, "valor": 450.00},
-    {"nome": "Carlos TV", "vencimento": 1, "valor": 158.00},
-    {"nome": "Consórcio (PUV)", "vencimento": 1, "valor": 220.00},
-    {"nome": "João (contabilidade)", "vencimento": 5, "valor": 400.00},
-    {"nome": "Spotify", "vencimento": 5, "valor": 40.00},
-    {"nome": "Disciplina Isolada", "vencimento": 5, "valor": 117.69},
-    {"nome": "Net", "vencimento": 10, "valor": 101.97},
-    {"nome": "Cemig", "vencimento": 10, "valor": 250.00},
-    {"nome": "Copasa", "vencimento": 10, "valor": 100.00},
-    {"nome": "Seguro", "vencimento": 10, "valor": 165.00},
-    {"nome": "Consórcio (Milin)", "vencimento": 10, "valor": 1035.00},
-    {"nome": "Consórcio (Amanda)", "vencimento": 10, "valor": 262.00},
-    {"nome": "Mercado Pago Emp Rap", "vencimento": 15, "valor": 213.30},
-    {"nome": "Sócio Cruzeiro", "vencimento": 15, "valor": 100.00},
-    {"nome": "Viagem Foz", "vencimento": 15, "valor": 117.87},
-    {"nome": "Davi (contabilidade)", "vencimento": 20, "valor": 200.00},
-    {"nome": "Mercado Pago Emp", "vencimento": 18, "valor": 251.71},
-    {"nome": "Pai iPhone 14 Plus", "vencimento": 28, "valor": 485.22},
-    {"nome": "Renata (contabilidade)", "vencimento": 28, "valor": 350.00},
-    {"nome": "Parcelamento IPVA", "vencimento": 28, "valor": 619.00}
-  ],
-  "receitas_variaveis": [
-    {"nome": "Salário Líquido", "valor": 5027.34, "tipo": "salario"},
-    {"nome": "João (contabilidade)", "valor": 400.00, "tipo": "contabilidade"},
-    {"nome": "Davi (contabilidade)", "valor": 200.00, "tipo": "contabilidade"},
-    {"nome": "Renata (contabilidade)", "valor": 350.00, "tipo": "contabilidade"},
-    {"nome": "Pai iPhone 14 Plus", "valor": 485.22, "tipo": "parcelamento"},
-    {"nome": "Spotify (compartilhado)", "valor": 40.00, "tipo": "servico"}
+    {
+      "nome": "Investimento",
+      "vencimento": 1,
+      "valor": 500
+    },
+    {
+      "nome": "Mercado pago",
+      "vencimento": 1,
+      "valor": 1400
+    },
+    {
+      "nome": "Coop viagem foz",
+      "vencimento": 1,
+      "valor": 545.87
+    },
+    {
+      "nome": "Diego foz",
+      "vencimento": 1,
+      "valor": 506
+    },
+    {
+      "nome": "Academia",
+      "vencimento": 1,
+      "valor": 100
+    },
+    {
+      "nome": "Gasolina",
+      "vencimento": 1,
+      "valor": 400
+    },
+    {
+      "nome": "PC (Diego)",
+      "vencimento": 1,
+      "valor": 450
+    },
+    {
+      "nome": "IPVA 2026",
+      "vencimento": 1,
+      "valor": 521.46
+    },
+    {
+      "nome": "Zezinho vidro",
+      "vencimento": 1,
+      "valor": 170
+    },
+    {
+      "nome": "Webert roupa",
+      "vencimento": 1,
+      "valor": 75
+    },
+    {
+      "nome": "Carlos TV",
+      "vencimento": 1,
+      "valor": 158
+    },
+    {
+      "nome": "Consórcio (PUV)",
+      "vencimento": 1,
+      "valor": 246
+    },
+    {
+      "nome": "Mercado pago emp rap",
+      "vencimento": 15,
+      "valor": 213.3
+    },
+    {
+      "nome": "Claude IA",
+      "vencimento": 1,
+      "valor": 40
+    },
+    {
+      "nome": "Net",
+      "vencimento": 10,
+      "valor": 101.97
+    },
+    {
+      "nome": "Disciplina Isolada",
+      "vencimento": 5,
+      "valor": 117.69
+    },
+    {
+      "nome": "Cemig",
+      "vencimento": 10,
+      "valor": 250
+    },
+    {
+      "nome": "Copasa",
+      "vencimento": 10,
+      "valor": 100
+    },
+    {
+      "nome": "Seguro",
+      "vencimento": 10,
+      "valor": 165
+    },
+    {
+      "nome": "Vivo",
+      "vencimento": 10,
+      "valor": 100
+    },
+    {
+      "nome": "Consórcio (Milin)",
+      "vencimento": 10,
+      "valor": 1050
+    },
+    {
+      "nome": "Consórcio (Amanda)",
+      "vencimento": 10,
+      "valor": 274
+    },
+    {
+      "nome": "Viagem foz",
+      "vencimento": 15,
+      "valor": 117.87
+    },
+    {
+      "nome": "Sócio cruzeiro",
+      "vencimento": 15,
+      "valor": 100
+    },
+    {
+      "nome": "Mercado pago emp",
+      "vencimento": 20,
+      "valor": 251.71
+    },
+    {
+      "nome": "Parcelamento IPVA (22,23,24,25)",
+      "vencimento": 28,
+      "valor": 619
+    },
+    {
+      "nome": "Santander",
+      "vencimento": null,
+      "valor": 1066.94
+    },
+    {
+      "nome": "Santander Ren",
+      "vencimento": null,
+      "valor": 185.42
+    },
+    {
+      "nome": "vó",
+      "vencimento": null,
+      "valor": 200
+    },
+    {
+      "nome": "Conta vivo",
+      "vencimento": null,
+      "valor": 80
+    },
+    {
+      "nome": "Jose Augusto Pintura",
+      "vencimento": null,
+      "valor": 300
+    },
+    {
+      "nome": "Advogada",
+      "vencimento": null,
+      "valor": 100
+    },
+    {
+      "nome": "Webert roupa",
+      "vencimento": null,
+      "valor": 135
+    },
+    {
+      "nome": "Mãe",
+      "vencimento": null,
+      "valor": 400
+    },
+    {
+      "nome": "Mãe cartão",
+      "vencimento": null,
+      "valor": 497
+    },
+    {
+      "nome": "Amanda",
+      "vencimento": null,
+      "valor": 237.56
+    },
+    {
+      "nome": "Webert roupa",
+      "vencimento": null,
+      "valor": 205
+    },
+    {
+      "nome": "Diogo (carro)",
+      "vencimento": null,
+      "valor": 12500
+    },
+    {
+      "nome": "IPVA",
+      "vencimento": null,
+      "valor": 539.99
+    },
+    {
+      "nome": "Franquia carro",
+      "vencimento": null,
+      "valor": 811
+    },
+    {
+      "nome": "Cofrinho",
+      "vencimento": null,
+      "valor": 100
+    }
   ],
   "dividas": [
-    {"credor": "OMNI S/A", "valor_original": 9232.40, "valor_atual": 11369.52},
-    {"credor": "Nu Financeira (1)", "valor_original": 986.29, "valor_atual": 38176.76},
-    {"credor": "Lojas Riachuelo", "valor_original": 2890.66, "valor_atual": 5409.26},
-    {"credor": "Banco PAN", "valor_original": 5339.24, "valor_atual": 8110.81},
-    {"credor": "Nu Financeira (2)", "valor_original": 8455.12, "valor_atual": 25250.92},
-    {"credor": "Banco Pan (2)", "valor_original": 423.20, "valor_atual": 467.30},
-    {"credor": "PicPay", "valor_original": 36353.25, "valor_atual": 167704.96},
-    {"credor": "Cartão ITI (Itaú)", "valor_original": 805.19, "valor_atual": 977.73},
-    {"credor": "Banco Inter", "valor_original": 8736.42, "valor_atual": 30469.80},
-    {"credor": "Banco CBSS", "valor_original": 0, "valor_atual": 6590.36},
-    {"credor": "Will Financeira", "valor_original": 0, "valor_atual": 383272.41}
+    {
+      "credor": "OMNI S/A CREDITO FINANCIAMENTO E INVESTIMENTO",
+      "valor_original": 9232.4,
+      "valor_atual": 11369.52
+    },
+    {
+      "credor": "Nu Financeira S.A.",
+      "valor_original": 986.29,
+      "valor_atual": 38176.76
+    },
+    {
+      "credor": "Lojas Riachuelo S/A",
+      "valor_original": 2890.66,
+      "valor_atual": 5409.26
+    },
+    {
+      "credor": "Banco PAN SA",
+      "valor_original": 5339.24,
+      "valor_atual": 8110.81
+    },
+    {
+      "credor": "Nu Financeira S.A.",
+      "valor_original": 8455.12,
+      "valor_atual": 25250.92
+    },
+    {
+      "credor": "Banco Pan",
+      "valor_original": 423.2,
+      "valor_atual": 467.3
+    },
+    {
+      "credor": "CP NAO CORRENTISTA - PICPAY",
+      "valor_original": 36353.25,
+      "valor_atual": 167704.96
+    },
+    {
+      "credor": "CARTAO ITI - Itau",
+      "valor_original": 805.19,
+      "valor_atual": 977.73
+    },
+    {
+      "credor": "BANCO INTER CARTAO DE CREDITO",
+      "valor_original": 8736.42,
+      "valor_atual": 30469.8
+    },
+    {
+      "credor": "Banco CBSS S.A",
+      "valor_original": 0,
+      "valor_atual": 6590.36
+    },
+    {
+      "credor": "Will Financeira S.A Crédito Financiamento e Investimento",
+      "valor_original": 0,
+      "valor_atual": 383272.41
+    }
   ]
 }
